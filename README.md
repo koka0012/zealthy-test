@@ -34,3 +34,10 @@ bun prisma migrate deploy
 ```
 
 It will create the columns and also seed the database.
+
+
+## Preview
+
+You can check a preview here:
+
+**[Demo](https://zealthy-test.vercel.app/)**

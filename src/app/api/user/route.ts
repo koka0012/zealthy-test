@@ -6,6 +6,12 @@ const DEFAULT_SELECT: Prisma.UserSelect = {
   id: true,
   email: true,
   onboardCompleted: true,
+  aboutMe: true,
+  birthDate: true,
+  city: true,
+  state: true,
+  zip: true,
+  street: true,
 }
 
 export const POST = async (request: Request) => {

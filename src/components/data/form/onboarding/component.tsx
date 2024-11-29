@@ -4,10 +4,13 @@ import { Button } from '@/components/atoms/button'
 import { Form } from '@/components/atoms/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
+import { onboardingCompleteFormAction } from './action'
 import { Step } from './components/step'
 import { useMultiContext } from './context'
 import { OnboardingFormSchema } from './schema'
+import { getDefaultValues } from './getDefaultValue'
 
 export interface OnboardingFormProps {
   fields: Record<string, string>
@@ -16,25 +19,18 @@ export interface OnboardingFormProps {
 const OnboardingForm = ({ fields }: OnboardingFormProps) => {
   const form = useForm<z.infer<typeof OnboardingFormSchema>>({
     resolver: zodResolver(OnboardingFormSchema),
-    defaultValues: {
-      aboutMe: '',
-      birthDate: undefined,
-      address: {
-        country: '',
-        street: '',
-        city: '',
-        state: '',
-        zip: '',
-      },
-    },
+    defaultValues: getDefaultValues(),
   })
 
   const { step, nextStep, prevStep } = useMultiContext()
 
-  function handleOnSubmit(values: z.infer<typeof OnboardingFormSchema>) {
+  async function handleOnSubmit(values: z.infer<typeof OnboardingFormSchema>) {
+    await onboardingCompleteFormAction(values)
     nextStep()
 
-    console.log(values)
+    if (step === 2) {
+      toast.success('All done! Go to /data to check the table.')
+    }
   }
 
   return (

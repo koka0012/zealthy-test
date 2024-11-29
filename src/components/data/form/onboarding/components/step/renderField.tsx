@@ -26,17 +26,6 @@ const renderField = (
   type: OnboardingComponent,
   control: Control<FieldValues>,
 ) => {
-  // return (
-  //   <FormItem>
-  //     <FormLabel className="flex items-center justify-between">
-  //       {getFieldLabel(type)}
-  //       <FormMessage />
-  //     </FormLabel>
-  //     <FormControl>
-  //       <Input placeholder="e.g Stephen King" {...field} />
-  //     </FormControl>
-  //   </FormItem>
-  // )
   switch (type) {
     case OnboardingComponent.ABOUT_ME:
       return (
@@ -82,7 +71,7 @@ const renderField = (
               render={({ field }) => (
                 <FormItem className="flex-2">
                   <FormLabel className="flex items-center justify-between">
-                    Street
+                    City
                     <FormMessage />
                   </FormLabel>
                   <FormControl>

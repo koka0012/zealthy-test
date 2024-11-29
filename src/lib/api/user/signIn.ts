@@ -1,3 +1,5 @@
+'use server'
+
 import { buildUrl } from '../build-url'
 
 export interface SignInRequestBody {
@@ -6,16 +8,18 @@ export interface SignInRequestBody {
 }
 
 export interface SignInResponseBody {
-  id: string
-  email: string
-  onboardCompleted: boolean
+  data: { id: string; email: string; onboardCompleted: boolean }
 }
 
 const signInRequest = async (data: SignInRequestBody) => {
-  return fetch(await buildUrl('user'), {
+  const response = await fetch(await buildUrl('user'), {
     method: 'POST',
     body: JSON.stringify(data),
   })
+
+  const { data: user } = (await response.json()) as SignInResponseBody
+
+  return user
 }
 
 export { signInRequest }

@@ -1,32 +1,19 @@
-import { signInRequest, SignInResponseBody } from '@/lib/api/user/signIn'
+import { updateUserRequest } from '@/lib/api/user/updateUser'
 import { isRedirectError } from 'next/dist/client/components/redirect'
-import { redirect } from 'next/navigation'
 import { toast } from 'sonner'
 import { z } from 'zod'
-import { SignInFormSchema } from './schema'
+import { OnboardingFormSchema } from './schema'
 
-const sigInFormAction = async (data: z.infer<typeof SignInFormSchema>) => {
+const onboardingCompleteFormAction = async (
+  data: z.infer<typeof OnboardingFormSchema>,
+) => {
   try {
-    const response = await signInRequest({
-      email: data.email,
-      password: data.password,
-    })
+    const user = JSON.parse(window.localStorage.getItem('user')!)
 
-    const responseData: SignInResponseBody = await response.json()
+    await updateUserRequest(user.id, data)
 
-    if (response.status === 401) {
-      toast.error('Invalid credentials', { position: 'bottom-center' })
-      return
-    }
-
-    if (!responseData.onboardCompleted) {
-      redirect('/onboarding')
-    } else {
-      redirect('/completed')
-    }
+    toast.success('Data saved...')
   } catch (error) {
-    console.error(error)
-
     if (isRedirectError(error)) {
       throw error
     }
@@ -42,4 +29,4 @@ const sigInFormAction = async (data: z.infer<typeof SignInFormSchema>) => {
   }
 }
 
-export { sigInFormAction }
+export { onboardingCompleteFormAction }

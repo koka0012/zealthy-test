@@ -1,4 +1,4 @@
-import { signInRequest, SignInResponseBody } from '@/lib/api/user/signIn'
+import { signInRequest } from '@/lib/api/user/signIn'
 import { isRedirectError } from 'next/dist/client/components/redirect'
 import { redirect } from 'next/navigation'
 import { toast } from 'sonner'
@@ -7,26 +7,26 @@ import { SignInFormSchema } from './schema'
 
 const sigInFormAction = async (data: z.infer<typeof SignInFormSchema>) => {
   try {
-    const response = await signInRequest({
+    const user = await signInRequest({
       email: data.email,
       password: data.password,
     })
 
-    const responseData: SignInResponseBody = await response.json()
-
-    if (response.status === 401) {
+    if (!user) {
       toast.error('Invalid credentials', { position: 'bottom-center' })
       return
     }
 
-    if (!responseData.onboardCompleted) {
+    console.log(user)
+
+    window.localStorage.setItem('user', JSON.stringify(user))
+
+    if (!user.onboardCompleted) {
       redirect('/onboarding')
     } else {
-      redirect('/completed')
+      redirect('/data')
     }
   } catch (error) {
-    console.error(error)
-
     if (isRedirectError(error)) {
       throw error
     }

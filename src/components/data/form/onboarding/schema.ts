@@ -4,7 +4,6 @@ const OnboardingFormSchema = z.object({
   aboutMe: z.string().optional(),
   birthDate: z.date().optional(),
   address: z.object({
-    country: z.string().optional(),
     street: z.string().optional(),
     city: z.string().optional(),
     state: z.string().optional(),

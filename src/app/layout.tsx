@@ -2,6 +2,13 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
 import { Toaster } from '@/components/atoms/sonner'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from '@/components/atoms/card'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -21,15 +28,28 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  cardTitle,
+  cardDescription,
 }: Readonly<{
   children: React.ReactNode
+  cardTitle: React.ReactNode
+  cardDescription: React.ReactNode
 }>) {
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className="flex h-screen w-screen items-center justify-center px-4">
+          <Card className="w-96 max-w-full">
+            <CardHeader>
+              <CardTitle>{cardTitle}</CardTitle>
+              <CardDescription>{cardDescription}</CardDescription>
+            </CardHeader>
+            <CardContent>{children}</CardContent>
+          </Card>
+        </div>
+
         <Toaster />
       </body>
     </html>

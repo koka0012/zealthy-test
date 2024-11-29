@@ -6,8 +6,11 @@ import {
   CardTitle,
 } from '@/components/atoms/card'
 import { OnboardingSettingForm } from '@/components/data/form/onboarding-setting-form'
+import { getOnboardingStepsRequest } from '@/lib/api/onboarding/getOnboardingSteps'
 
-export default function AdminPage() {
+export default async function AdminPage() {
+  const data = await getOnboardingStepsRequest()
+
   return (
     <div className="flex h-screen w-screen items-center justify-center px-4">
       <Card className="w-96 max-w-full">
@@ -20,7 +23,7 @@ export default function AdminPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <OnboardingSettingForm />
+          <OnboardingSettingForm data={data} />
         </CardContent>
       </Card>
     </div>

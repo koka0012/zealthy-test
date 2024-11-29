@@ -36,3 +36,15 @@ model Address {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+enum OnboardingComponent {
+  ABOUT_ME
+  ADDRESS
+  BIRTH_DATE
+}
+
+model OnboardingSteps {
+  id        String              @id @default(cuid())
+  step      String
+  component OnboardingComponent @unique
+}

@@ -3,44 +3,81 @@
 import { DragTag } from '@/components/atoms/drag-tag'
 import { DroppableColumn } from '@/components/molecules/droppable-collumn'
 import { Draggable } from '@/components/molecules/droppable-field'
+import { updateOnboardingSteps } from '@/lib/api/onboarding/updateOnboardingSteps'
 import { DndContext, DragEndEvent } from '@dnd-kit/core'
-import { useState } from 'react'
+import { OnboardingComponent } from '@prisma/client'
+import { useRef, useState } from 'react'
+import { toast } from 'sonner'
 
-const OnboardingSettingForm = () => {
-  const [parents, setParents] = useState<Record<string, string>>({
-    aboutMe: '1',
-    birthDate: '1',
-    address: '2',
-  })
+export interface OnboardingSettingFormProps {
+  data: Record<string, string>
+}
 
-  function handleDragEnd({ over, active }: DragEndEvent) {
-    setParents((state) => ({
-      ...state,
-      [active.id]: over?.id.toString() || state[active.id],
-    }))
+const OnboardingSettingForm = ({ data }: OnboardingSettingFormProps) => {
+  const refData = useRef(data)
+  const [parents, setParents] = useState<Record<string, string>>(
+    refData.current,
+  )
+
+  async function handleDragEnd({ over, active }: DragEndEvent) {
+    const newState = {
+      ...parents,
+      [active.id]: over?.id.toString() || parents[active.id],
+    }
+
+    const hasAnyEmptyStep =
+      Object.keys(newState).every((key) => newState[key] !== '1') ||
+      Object.keys(newState).every((key) => newState[key] !== '2')
+
+    if (hasAnyEmptyStep) {
+      toast.error('At least one field must be in each step')
+      return
+    }
+
+    setParents(newState)
+
+    // Send only steps that has been changed to api
+    const updatedSteps = Object.keys(newState)
+      .filter((key) => newState[key] !== refData.current[key])
+      .map((key) => ({
+        component: key as OnboardingComponent,
+        step: newState[key],
+      }))
+
+    const serverData = await updateOnboardingSteps(updatedSteps)
+    refData.current = serverData.data
   }
 
   const fields = [
     {
-      id: 'aboutMe',
+      id: OnboardingComponent.ABOUT_ME,
       component: (
-        <Draggable id="aboutMe" key="aboutMe">
+        <Draggable
+          id={OnboardingComponent.ABOUT_ME}
+          key={OnboardingComponent.ABOUT_ME}
+        >
           <DragTag>About Me</DragTag>
         </Draggable>
       ),
     },
     {
-      id: 'birthDate',
+      id: OnboardingComponent.BIRTH_DATE,
       component: (
-        <Draggable id="birthDate" key="birthDate">
+        <Draggable
+          id={OnboardingComponent.BIRTH_DATE}
+          key={OnboardingComponent.BIRTH_DATE}
+        >
           <DragTag>Birth Date</DragTag>
         </Draggable>
       ),
     },
     {
-      id: 'address',
+      id: OnboardingComponent.ADDRESS,
       component: (
-        <Draggable id="address" key="address">
+        <Draggable
+          id={OnboardingComponent.ADDRESS}
+          key={OnboardingComponent.ADDRESS}
+        >
           <DragTag>Address</DragTag>
         </Draggable>
       ),

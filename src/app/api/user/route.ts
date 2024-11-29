@@ -14,6 +14,14 @@ const DEFAULT_SELECT: Prisma.UserSelect = {
   street: true,
 }
 
+export const GET = async () => {
+  const users = await prisma.user.findMany({
+    select: DEFAULT_SELECT,
+  })
+
+  return Response.json({ data: users }, { status: 200 })
+}
+
 export const POST = async (request: Request) => {
   const data = await request.json()
 

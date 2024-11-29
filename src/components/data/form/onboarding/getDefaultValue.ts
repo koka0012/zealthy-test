@@ -5,7 +5,7 @@ const getDefaultValues = () => {
 
   return {
     aboutMe: user.aboutMe || '',
-    birthDate: new Date(user.birthDate) || '',
+    birthDate: user.birthDate ? new Date(user.birthDate) : undefined,
     address: {
       street: user.street || '',
       city: user.city || '',

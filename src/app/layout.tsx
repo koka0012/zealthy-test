@@ -41,7 +41,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <div className="flex h-screen w-screen items-center justify-center px-4">
-          <Card className="w-96 max-w-full">
+          <Card className="min-w-96 max-w-full">
             <CardHeader>
               <CardTitle>{cardTitle}</CardTitle>
               <CardDescription>{cardDescription}</CardDescription>

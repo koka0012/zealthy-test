@@ -1,12 +1,11 @@
-import { SignInForm } from '@/components/data/form/sign-in-form/component'
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/atoms/card'
+import { SignInForm } from '@/components/data/form/sign-in-form/component'
 
 export default function Home() {
   return (

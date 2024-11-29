@@ -1,12 +1,13 @@
 'use client'
 
+import { Button } from '@/components/atoms/button'
 import { Form } from '@/components/atoms/form'
 import { FormTextInput } from '@/components/molecules/form-text-input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { sigInFormAction } from './action'
 import { SignInFormSchema } from './schema'
-import { Button } from '@/components/atoms/button'
 
 const SignInForm = () => {
   const form = useForm<z.infer<typeof SignInFormSchema>>({
@@ -17,9 +18,7 @@ const SignInForm = () => {
     },
   })
 
-  const handleOnSubmit = (data: z.infer<typeof SignInFormSchema>) => {
-    console.log(data)
-  }
+  const handleOnSubmit = sigInFormAction
 
   return (
     <Form {...form}>
@@ -41,7 +40,9 @@ const SignInForm = () => {
           placeholder="********"
         />
         <div className="flex justify-end">
-          <Button type="submit">Sign-In</Button>
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            Sign-In
+          </Button>
         </div>
       </form>
     </Form>

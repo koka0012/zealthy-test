@@ -7,7 +7,7 @@ import {
 } from '@/components/atoms/card'
 import { SignInForm } from '@/components/data/form/sign-in-form/component'
 
-export default function Home() {
+export default function SignInPage() {
   return (
     <div className="flex h-screen w-screen items-center justify-center px-4">
       <Card className="w-96 max-w-full">
